@@ -1,7 +1,7 @@
 const qwertyKeys = [
     "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
     "A", "S", "D", "F", "G", "H", "J", "K", "L",
-    "↵", "Z", "X", "C", "V", "B", "N", "M", "⌫"
+    "ENTER", "Z", "X", "C", "V", "B", "N", "M", "⌫"
 ];
 let currentRow = 0;
 let currentColumn = 0;
@@ -74,14 +74,8 @@ function GameLogic() {
         currentColumn++;
         currentWord += letter;
 
-        console.log(currentColumn);
+        enterKey.disabled = currentWord.length != 5;
 
-        if (currentWord.length != 5) {
-            enterKey.disabled = true;
-        }
-        else {
-            enterKey.disabled = false;
-        }
         console.log(tileId + " " + letter + " / " + currentWord);
     }
 
@@ -113,26 +107,49 @@ function GameLogic() {
     // input for enter
     let enter = document.getElementById("enter");
     enter.addEventListener("click", EnterPressed);
-    
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            EnterPressed();
+        }
+    });
+
     function EnterPressed() {
-        currentColumn = 0;
-        currentRow++;
-        currentWord = "";
-        let enterKey = document.getElementById("enter").disabled = true;
+        if (currentWord.length == 5) {
+            currentColumn = 0;
+            currentRow++;
+            currentWord = "";
+        }
+        document.getElementById("enter").disabled = true;
     }
-    
+
+    // input for backspace
+    let backspace = document.getElementById("backspace");
+    backspace.addEventListener("click", BackspacePressed);
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Backspace') {
+            BackspacePressed();
+        }
+    });
+
     function BackspacePressed() {
-        
+        if (currentColumn > 0) {
+            currentColumn--;
+        }
+        if (currentWord.length > 0) {
+            currentWord = currentWord.slice(0, -1);
+        }
+        const tileId = `r${currentRow}c${currentColumn}`;
+        const tile = document.getElementById(tileId);
+        tile.textContent = "";
     }
 }
-
-
-
 
 function Game() {
     createTiles();
     createKeyboard();
-    
+
     GameLogic();
 
 

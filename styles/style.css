@@ -137,7 +137,8 @@
 }
 
 .bigger-key{
-    width: 50px;
+    width: 65px;
+    font-size: 0.9em;
 }
 
 .bigger-key > button{
