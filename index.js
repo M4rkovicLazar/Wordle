@@ -6,6 +6,8 @@ const qwertyKeys = [
 let currentRow = 0;
 let currentColumn = 0;
 let currentWord = "";
+let gameOver = false;
+let wordForGuess = "";
 const maxRows = 6;
 const maxColumns = 5;
 // "↵"
@@ -14,15 +16,16 @@ function createTiles() {
     let gameBoard = document.getElementById('game-board');
 
     for (let i = 0; i < 6; i++) {
-        let column = document.createElement('div');
-        column.classList.add('column');
+        let row = document.createElement('div');
+        row.classList.add('row');
+        row.id = "r" + i;
         for (let j = 0; j < 5; j++) {
             let tile = document.createElement('div');
             tile.classList.add('tile');
             tile.id = "r" + i + "c" + j;
-            column.appendChild(tile);
+            row.appendChild(tile);
         }
-        gameBoard.appendChild(column);
+        gameBoard.appendChild(row);
     }
     console.log(`GG ez`);
 }
@@ -69,14 +72,17 @@ function GameLogic() {
         const tileId = `r${currentRow}c${currentColumn}`;
         const tile = document.getElementById(tileId);
         const enterKey = document.getElementById("enter");
+        tile.classList.add("focused-tile");
+        tile.classList.add('active');
 
         tile.textContent = letter;
         currentColumn++;
         currentWord += letter;
 
         enterKey.disabled = currentWord.length != 5;
-
-        console.log(tileId + " " + letter + " / " + currentWord);
+        if (currentColumn == maxColumns) {
+            console.log(currentWord);
+        }
     }
 
 
@@ -114,13 +120,55 @@ function GameLogic() {
         }
     });
 
-    function EnterPressed() {
+    async function EnterPressed() {
+
         if (currentWord.length == 5) {
+            const valid = await isValidWord(currentWord);
+            if (!valid) {
+                console.log("This is not a valid word!");
+                ShakeRow();
+                return;
+            }
+            else {
+                console.log("Word is valid!");
+                let colors = checkGuess(currentWord, wordForGuess);
+
+                for (let i = 0; i < currentWord.length; i++) {
+                    const tile = document.getElementById(`r${currentRow}c${i}`);
+                    tile.classList.add(colors[i]); // "green", "yellow", or "gray"
+                }
+            }
+
+            if ((currentWord.toUpperCase()) === (wordForGuess.toUpperCase())) {
+                gameOver = true;
+                showCustomAlert("Well done!!!");
+                return;
+            }
+            else if (currentRow === maxRows - 1) {
+                gameOver = true;
+                showCustomAlert("Good luck next time");
+                return;
+            }
+
+            if (gameOver) {
+                showCustomAlert("Well done!!!");
+                return;
+            }
+
             currentColumn = 0;
             currentRow++;
             currentWord = "";
         }
         document.getElementById("enter").disabled = true;
+    }
+
+    async function ShakeRow() {
+        const row = document.getElementById("r" + currentRow);
+        row.classList.add("shake");
+
+        row.addEventListener("animationend", () => {
+            row.classList.remove("shake");
+        });
     }
 
     // input for backspace
@@ -143,16 +191,105 @@ function GameLogic() {
         const tileId = `r${currentRow}c${currentColumn}`;
         const tile = document.getElementById(tileId);
         tile.textContent = "";
+
+        tile.classList.remove('active');
+        if (currentWord.length < 5) {
+            enter.disabled = true;
+        }
+    }
+
+}
+
+function ResetGame() {
+    getWord();
+
+    gameOver = false;
+    currentColumn = 0;
+    currentRow = 0;
+    currentWord = "";
+    wordForGuess = "";
+
+    for (let row = 0; row < maxRows; row++) {
+        for (let col = 0; col < maxColumns; col++) {
+            const tile = document.getElementById(`r${row}c${col}`);
+            tile.textContent = "";
+            tile.className = "tile";
+        }
     }
 }
 
+
+function showCustomAlert(message) {
+    const alertBox = document.getElementById("alert-container");
+    const alertMessage = document.getElementById("alert-message");
+    alertMessage.textContent = message;
+    alertBox.classList.remove("hidden");
+}
+
+const tryAgainButton = document.getElementById("alert-ok");
+tryAgainButton.addEventListener("click", function () {
+    hideCustomAlert();
+    ResetGame();
+});
+
+function hideCustomAlert() {
+    document.getElementById("alert-container").classList.add("hidden");
+}
+
+//APIs
+async function isValidWord(word) {
+    const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word.toUpperCase()}`);
+    return response.ok;
+}
+async function getWord() {
+    const response = await fetch('https://random-word-api.vercel.app/api?words=1&length=5');
+    const data = await response.json(); // data je niz, npr. ["APPLE"]
+    wordForGuess = data[0].toUpperCase();
+    console.log("Random word:", wordForGuess);
+    return wordForGuess;
+}
+
+async function CheckLetters() {
+
+}
+// TODO: CORRECT LETTER
+// TODO: LETTER OUT OF POSITION
+function checkGuess(guess, target) {
+    const result = Array(guess.length).fill("gray");
+    const targetLetters = target.split("");
+    const guessLetters = guess.split("");
+
+    // First pass: check for correct letters in correct place (green)
+    for (let i = 0; i < guessLetters.length; i++) {
+        if (guessLetters[i] === targetLetters[i]) {
+            result[i] = "green";
+            targetLetters[i] = null; // prevent duplicate match
+            guessLetters[i] = null;
+        }
+    }
+
+    // Second pass: check for correct letters in wrong place (yellow)
+    for (let i = 0; i < guessLetters.length; i++) {
+        if (guessLetters[i] && targetLetters.includes(guessLetters[i])) {
+            result[i] = "yellow";
+            const index = targetLetters.indexOf(guessLetters[i]);
+            targetLetters[index] = null; // prevent reuse
+        }
+    }
+
+    return result;
+}
+
+// GAME
 function Game() {
     createTiles();
     createKeyboard();
+    getWord();
 
     GameLogic();
-
-
 }
 
 Game();
+
+
+

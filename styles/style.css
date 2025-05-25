@@ -1,7 +1,10 @@
 :root {
-    --text-color: rgb(79, 25, 132);
-    --background-col: rgba(102, 51, 153, 0.678);
-
+    --text-color: #948979;
+    --body-color: #242932;
+    --tile-color: #505763;
+    --tile-active: #DFD0B8;
+    --keyboard-color: #191d23;
+    --keyboard-font-color: #DFD0B8;
     --tile-width: 60px;
     --tile-height: 60px;
 }
@@ -19,48 +22,72 @@
 }
 
 .body {
-    background-color: cadetblue;
+    background-color: var(--body-color);
 }
 
 .header {
-    margin: 10px 5px 5px 5px;
-    border: solid, red, 2px;
+    margin: 5px 5px 5px 5px;
+    /* border: 2px solid red; */
 }
 
 .header-container {
+    /* border: 1px solid green; */
+
     margin: 5px;
-    height: 25px;
+    height: 40px;
     /* default size je 16px, 1em = 16px, 2em = 32px */
     font-size: 1em;
-    border: 4px solid black;
     text-align: center;
-
     display: flex;
     justify-content: space-between;
     align-items: stretch;
 }
 
-.header-left-item,
-.header-middle-item,
-.header-right-item {
+.header-left-container,
+.header-middle-container,
+.header-right-container {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
+
+.header-left-container,
+.header-right-container {
+    margin-left: 15px;
+    margin-right: 15px;
+    border-radius: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
+    width: 90px;
+    background-color: var(--keyboard-font-color);
 }
 
-.header-left-item,
-.header-right-item {
-    width: 100px;
-    background-color: var(--background-col);
-}
-
-.header-middle-item {
+.header-middle-container {
     flex: 1;
     color: var(--text-color);
     font-style: italic;
+    font-size: 2em;
+}
+
+.header-right-div {
+    width: 60%;
+    height: 40%;
+    border: 1px solid red;
+    display: inherit;
+}
+
+.header-right-div>button {
+    width: 30%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #000000;
+    border-width: 0px;
 }
 
 .main {
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -80,7 +107,7 @@
     align-items: center;
 }
 
-.column {
+.row {
     width: fit-content;
     display: flex;
     justify-content: space-between;
@@ -90,17 +117,19 @@
 .tile {
     width: var(--tile-width);
     height: var(--tile-height);
+    margin: 5px 5px 0px 0px;
+    font-size: 2.2em;
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 2px solid var(--tile-color);
     color: var(--text-color);
-    font-size: 2em;
-    border: 2px solid rgb(32, 36, 139);
-    margin: 5px 5px 0px 0px;
+    transition: all 0.2s ease-in-out;
+    /* apply transition to border-color */
 }
 
 .keyboard-container {
-    width: 500px;
+    width: 600px;
     margin-top: 10px;
     display: flex;
     gap: 10px;
@@ -114,34 +143,65 @@
     align-items: center;
     justify-content: center;
     gap: 3px;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
 }
 
 .key {
     border-radius: 10px;
-    width:36px;
+    width: 40px;
     height: 48px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #1e1e1e;
 }
 
 .key-btn {
-    font-size: 1em;
+    font-size: 1.2em;
     width: 100%;
     height: 100%;
+    background-color: var(--keyboard-color);
     text-align: center;
-    border-radius:inherit;
+    border-radius: inherit;
     align-self: center;
+    border-width: 1px;
+    color: var(--keyboard-font-color);
+    border-color: var(--text-color);
 }
 
-.bigger-key{
+.bigger-key {
     width: 65px;
-    font-size: 0.9em;
 }
 
-.bigger-key > button{
-    font-size: 1em;
-    background-color: rgba(11, 91, 148, 0.268);
+#enter:disabled {
+    background-color: #aaa;
+    /* Siva pozadina */
+    color: white;
+    /* Beli tekst */
+    border: 2px solid #888;
+    /* Tamnosiva ivica */
+    cursor: not-allowed;
+    /* Zabrana kursora */
+    opacity: 0.6;
+    /* Poluprovidno */
+    transition: 0.3s ease;
+}
+
+.bigger-key>button {
+    font-size: 0.9em;
+    background-color: #0b5b9444;
+}
+
+.green {
+    background-color: #6aaa64;
+    color: white;
+}
+
+.yellow {
+    background-color: #c9b458;
+    color: white;
+}
+
+.gray {
+    background-color: #787c7e;
+    color: white;
 }
