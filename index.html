@@ -4,10 +4,11 @@
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Underdog&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Underdog&display=swap" rel="stylesheet">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Wordle</title>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/animations.css">
     <link rel="stylesheet" href="styles/alert.css">
@@ -19,15 +20,21 @@
         <div class="header-container">
             <div class="header-left-container">
                 <div class="header-left-div">
-                    <button class="hint">💡</button>
+                    <button id="hint-btn" class="hint"><div class=" icon" style="width: 100%; height: 100%; border-radius: inherit;"><img class="" id="hint-img" src="styles/hint.png" alt="Logo"></div></button>
                 </div>
             </div>
-            <div class="header-middle-container">Wordle</div>
+
+            <div class="header-middle-container">WORDLE</div>
+
             <div class="header-right-container">
                 <div class="header-right-div">
-                    <button class="settings"></button>
+                    <div id="day-ico">☀️</div>
+                    <div id="night-ico">🌙</div>
+
+                    <button id="slider" class="settings"></button>
                 </div>
             </div>
+        
         </div>
     </header>
 

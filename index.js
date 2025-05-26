@@ -3,6 +3,7 @@ const qwertyKeys = [
     "A", "S", "D", "F", "G", "H", "J", "K", "L",
     "ENTER", "Z", "X", "C", "V", "B", "N", "M", "⌫"
 ];
+
 let currentRow = 0;
 let currentColumn = 0;
 let currentWord = "";
@@ -12,6 +13,7 @@ const maxRows = 6;
 const maxColumns = 5;
 // "↵"
 // "⌫"
+
 function createTiles() {
     let gameBoard = document.getElementById('game-board');
 
@@ -27,7 +29,6 @@ function createTiles() {
         }
         gameBoard.appendChild(row);
     }
-    console.log(`GG ez`);
 }
 
 function createKeyboard() {
@@ -66,140 +67,6 @@ function createKeyboard() {
     enter.disabled = true;
 }
 
-function GameLogic() {
-
-    function handleLetterInput(letter) {
-        const tileId = `r${currentRow}c${currentColumn}`;
-        const tile = document.getElementById(tileId);
-        const enterKey = document.getElementById("enter");
-        tile.classList.add("focused-tile");
-        tile.classList.add('active');
-
-        tile.textContent = letter;
-        currentColumn++;
-        currentWord += letter;
-
-        enterKey.disabled = currentWord.length != 5;
-        if (currentColumn == maxColumns) {
-            console.log(currentWord);
-        }
-    }
-
-
-    // input for keyboard
-    document.addEventListener("keydown", function (e) {
-        if (/^[a-zA-Z]$/.test(e.key)) {
-            if (currentRow < maxRows && currentColumn < maxColumns) {
-                handleLetterInput(e.key.toUpperCase());
-            }
-        }
-    });
-
-
-    // input for on screen keyboard
-    document.querySelectorAll(".key").forEach(button => {
-        button.addEventListener("click", keyClickHandler)
-    });
-    function keyClickHandler(event) {
-        if (currentRow < maxRows && currentColumn < maxColumns) {
-            handleLetterInput(event.target.textContent.toUpperCase());
-        }
-    }
-    document.querySelectorAll(".bigger-key").forEach(button => {
-        button.removeEventListener("click", keyClickHandler)
-    });
-
-
-    // input for enter
-    let enter = document.getElementById("enter");
-    enter.addEventListener("click", EnterPressed);
-
-    document.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            EnterPressed();
-        }
-    });
-
-    async function EnterPressed() {
-
-        if (currentWord.length == 5) {
-            const valid = await isValidWord(currentWord);
-            if (!valid) {
-                console.log("This is not a valid word!");
-                ShakeRow();
-                return;
-            }
-            else {
-                console.log("Word is valid!");
-                let colors = checkGuess(currentWord, wordForGuess);
-
-                for (let i = 0; i < currentWord.length; i++) {
-                    const tile = document.getElementById(`r${currentRow}c${i}`);
-                    tile.classList.add(colors[i]); // "green", "yellow", or "gray"
-                }
-            }
-
-            if ((currentWord.toUpperCase()) === (wordForGuess.toUpperCase())) {
-                gameOver = true;
-                showCustomAlert("Well done!!!");
-                return;
-            }
-            else if (currentRow === maxRows - 1) {
-                gameOver = true;
-                showCustomAlert("Good luck next time");
-                return;
-            }
-
-            if (gameOver) {
-                showCustomAlert("Well done!!!");
-                return;
-            }
-
-            currentColumn = 0;
-            currentRow++;
-            currentWord = "";
-        }
-        document.getElementById("enter").disabled = true;
-    }
-
-    async function ShakeRow() {
-        const row = document.getElementById("r" + currentRow);
-        row.classList.add("shake");
-
-        row.addEventListener("animationend", () => {
-            row.classList.remove("shake");
-        });
-    }
-
-    // input for backspace
-    let backspace = document.getElementById("backspace");
-    backspace.addEventListener("click", BackspacePressed);
-
-    document.addEventListener('keydown', function (event) {
-        if (event.key === 'Backspace') {
-            BackspacePressed();
-        }
-    });
-
-    function BackspacePressed() {
-        if (currentColumn > 0) {
-            currentColumn--;
-        }
-        if (currentWord.length > 0) {
-            currentWord = currentWord.slice(0, -1);
-        }
-        const tileId = `r${currentRow}c${currentColumn}`;
-        const tile = document.getElementById(tileId);
-        tile.textContent = "";
-
-        tile.classList.remove('active');
-        if (currentWord.length < 5) {
-            enter.disabled = true;
-        }
-    }
-
-}
-
 function ResetGame() {
     getWord();
 
@@ -218,29 +85,164 @@ function ResetGame() {
     }
 }
 
+function GameLogic() {
+    // input for keyboard
+    document.addEventListener("keydown", function (e) {
+        if (/^[a-zA-Z]$/.test(e.key)) {
+            if (currentRow < maxRows && currentColumn < maxColumns) {
+                handleLetterInput(e.key.toUpperCase());
+            }
+        }
+    });
 
-function showCustomAlert(message) {
+    // input for on screen keyboard
+    document.querySelectorAll(".key").forEach(button => {
+        button.addEventListener("click", keyClickHandler)
+    });
+
+    document.querySelectorAll(".bigger-key").forEach(button => {
+        button.removeEventListener("click", keyClickHandler)
+    });
+
+    // input for enter
+    let enter = document.getElementById("enter");
+    enter.addEventListener("click", EnterPressed);
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            EnterPressed();
+        }
+    });
+
+    // input for backspace
+    let backspace = document.getElementById("backspace");
+    backspace.addEventListener("click", BackspacePressed);
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Backspace') {
+            BackspacePressed();
+        }
+    });
+
+    //game finished alert
+    const tryAgainButton = document.getElementById("alert-ok");
+    tryAgainButton.addEventListener("click", handleTryAgainClick);
+}
+
+async function EnterPressed() {
+    const tryAgainButton = document.getElementById("alert-ok");
+    tryAgainButton.addEventListener("click", handleTryAgainClick);
+    if (currentWord.length == 5) {
+        const valid = await isValidWord(currentWord);
+        if (!valid) {
+            console.log("This is not a valid word!", "Try again");
+            ShakeRow();
+            return;
+        }
+        else {
+            console.log("Word is valid!");
+            let colors = checkGuess(currentWord, wordForGuess);
+
+            for (let i = 0; i < currentWord.length; i++) {
+                const tile = document.getElementById(`r${currentRow}c${i}`);
+                tile.classList.add(colors[i]); // "green", "yellow", or "gray"
+            }
+        }
+
+        if ((currentWord.toUpperCase()) === (wordForGuess.toUpperCase())) {
+            gameOver = true;
+            showCustomAlert("Well done!!!", "Try again");
+            return;
+        }
+        else if (currentRow === maxRows - 1) {
+            gameOver = true;
+            showCustomAlert("Good luck next time", "Try again");
+            return;
+        }
+
+        if (gameOver) {
+            showCustomAlert("Well done!!!", "Try again");
+            return;
+        }
+
+        currentColumn = 0;
+        currentRow++;
+        currentWord = "";
+    }
+    document.getElementById("enter").disabled = true;
+}
+
+function BackspacePressed() {
+    if (currentColumn > 0) {
+        currentColumn--;
+    }
+    if (currentWord.length > 0) {
+        currentWord = currentWord.slice(0, -1);
+    }
+    const tileId = `r${currentRow}c${currentColumn}`;
+    const tile = document.getElementById(tileId);
+    tile.textContent = "";
+
+    tile.classList.remove('active');
+    if (currentWord.length < 5) {
+        enter.disabled = true;
+    }
+}
+
+function keyClickHandler(event) {
+    if (currentRow < maxRows && currentColumn < maxColumns) {
+        handleLetterInput(event.target.textContent.toUpperCase());
+    }
+}
+
+function handleLetterInput(letter) {
+    const tileId = `r${currentRow}c${currentColumn}`;
+    const tile = document.getElementById(tileId);
+    const enterKey = document.getElementById("enter");
+    tile.classList.add("focused-tile");
+    tile.classList.add('active');
+
+    tile.textContent = letter;
+    currentColumn++;
+    currentWord += letter;
+
+    enterKey.disabled = currentWord.length != 5;
+    if (currentColumn == maxColumns) {
+        console.log(currentWord);
+    }
+}
+
+function ShakeRow() {
+    const row = document.getElementById("r" + currentRow);
+    row.classList.add("shake");
+    row.addEventListener("animationend", () => {
+        row.classList.remove("shake");
+    });
+}
+
+function showCustomAlert(message, btntxt) {
     const alertBox = document.getElementById("alert-container");
     const alertMessage = document.getElementById("alert-message");
+    const alertBtn = document.getElementById("alert-ok");
+    alertBtn.textContent = btntxt;
     alertMessage.textContent = message;
     alertBox.classList.remove("hidden");
 }
 
-const tryAgainButton = document.getElementById("alert-ok");
-tryAgainButton.addEventListener("click", function () {
+function handleTryAgainClick() {
     hideCustomAlert();
     ResetGame();
-});
+}
 
 function hideCustomAlert() {
     document.getElementById("alert-container").classList.add("hidden");
 }
-
 //APIs
 async function isValidWord(word) {
     const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word.toUpperCase()}`);
     return response.ok;
 }
+
 async function getWord() {
     const response = await fetch('https://random-word-api.vercel.app/api?words=1&length=5');
     const data = await response.json(); // data je niz, npr. ["APPLE"]
@@ -249,11 +251,6 @@ async function getWord() {
     return wordForGuess;
 }
 
-async function CheckLetters() {
-
-}
-// TODO: CORRECT LETTER
-// TODO: LETTER OUT OF POSITION
 function checkGuess(guess, target) {
     const result = Array(guess.length).fill("gray");
     const targetLetters = target.split("");
@@ -279,7 +276,6 @@ function checkGuess(guess, target) {
 
     return result;
 }
-
 // GAME
 function Game() {
     createTiles();
@@ -288,6 +284,37 @@ function Game() {
 
     GameLogic();
 }
+
+let hintBtn = document.getElementById("hint-btn");
+hintBtn.addEventListener("click", getDefinition);
+
+async function getDefinition() {
+    const tryAgainButton = document.getElementById("alert-ok");
+    try {
+        const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${wordForGuess}`);
+        const data = await response.json();
+        const firstDefinition = data[0]?.meanings[0]?.definitions[0]?.definition;
+
+        tryAgainButton.removeEventListener("click", handleTryAgainClick);
+        showCustomAlert(firstDefinition, "OK");
+        tryAgainButton.addEventListener("click", hideCustomAlert);
+
+    } catch (error) {
+        showCustomAlert("Error fetching definition.", "OK");;
+        console.error(error);
+    }
+}
+let slider = document.getElementById("slider");
+
+slider.addEventListener("click", () => {
+    if (slider.classList.contains("settings-Night")) {
+        slider.classList.remove("settings-Night");
+        slider.classList.add("settings-Day");
+    } else {
+        slider.classList.remove("settings-Day");
+        slider.classList.add("settings-Night");
+    }
+});
 
 Game();
 

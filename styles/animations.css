@@ -1,21 +1,121 @@
-:root {
-    /* --tile-active: #DFD0B8; */
-}
-
 .tile.active {
-    border: 2px solid var(--tile-active);
-    box-shadow: 0 0 3px var(--tile-active);
+  border: 2px solid var(--tile-active);
+  box-shadow: 0 0 3px var(--tile-active);
 }
 
 @keyframes shake {
-  0% { transform: translateX(0); }
-  20% { transform: translateX(-5px); }
-  40% { transform: translateX(5px); }
-  60% { transform: translateX(-5px); }
-  80% { transform: translateX(5px); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-5px);
+  }
+
+  40% {
+    transform: translateX(5px);
+  }
+
+  60% {
+    transform: translateX(-5px);
+  }
+
+  80% {
+    transform: translateX(5px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
 }
 
 .shake {
   animation: shake 0.4s ease-in-out;
+}
+
+.icon {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.icon:hover {
+  background-color: #948979;
+  animation: pulse 1s infinite;
+  cursor: pointer;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.key:hover {
+  background-color: #948979;
+  animation: updown 1s infinite;
+  cursor: pointer;
+}
+
+@keyframes updown {
+  0% {
+    transform: translateY(0px);
+  }
+
+  40% {
+    transform: translateY(-1px);
+  }
+
+  60% {
+    transform: translateY(1px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+
+.settings-Day {
+  transition: transform 0.3s ease;
+  transform: translateX(40px);
+}
+
+.animate-slide {
+  animation: slideEffect 0.3s ease;
+}
+
+@keyframes slideEffect {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(40px);
+  }
+}
+
+.settings-Night {
+  transition: transform 0.5s ease;
+  transform: translateX(0px);
+}
+
+.animate-slide-Day {
+  animation: slideEffectDay 0.5s ease;
+}
+
+@keyframes slideEffectDay {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-40px);
+  }
 }
