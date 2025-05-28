@@ -1,4 +1,6 @@
 :root {
+    --alert-color:#948979;
+    --alert-font-color:black;
     --text-color: #948979;
     --body-color: #242932;
     --tile-color: #5a6270;
@@ -10,6 +12,8 @@
 }
 
 :root.light {
+    --alert-color:#504a4a;
+    --alert-font-color:white;
     --text-color: #534343;
     --body-color: #ccc6bf;
     --tile-color: #633333;
@@ -105,13 +109,11 @@
     border-radius: 15px;
     border-width: 0px;
     background-color: transparent;
-    /* border: 2px var(--text-color) solid; */
 }
 
 .header-middle-container {
     flex: 1;
     color: var(--text-color);
-    font-style: italic;
     font-size: 4em;
 }
 
@@ -267,7 +269,6 @@
 }
 
 footer {
-    font-style: italic;
     position: fixed;
     bottom: 0;
     left: 0;
