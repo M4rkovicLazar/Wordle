@@ -1,13 +1,25 @@
 :root {
     --text-color: #948979;
     --body-color: #242932;
-    --tile-color: #505763;
+    --tile-color: #5a6270;
     --tile-active: #DFD0B8;
     --keyboard-color: #191d23;
     --keyboard-font-color: #DFD0B8;
     --tile-width: 70px;
     --tile-height: 70px;
 }
+
+:root.light {
+    --text-color: #534343;
+    --body-color: #ccc6bf;
+    --tile-color: #633333;
+    --tile-active: #534343;
+    --keyboard-color: #d9d4cd;
+    --keyboard-font-color: #161514;
+    --tile-width: 70px;
+    --tile-height: 70px;
+}
+
 
 * {
     padding: 0px;
@@ -20,7 +32,6 @@
     font-style: normal;
 }
 
-/* Oswald font (optional: adjust class name to your use) */
 .oswald-regular {
     font-family: "Oswald", sans-serif;
     font-optical-sizing: auto;
@@ -29,15 +40,23 @@
 }
 
 .body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: var(--body-color);
     font-family: "Oswald", sans-serif;
 
 }
 
 .header {
+    width: 60%;
     height: 100px;
-    border-bottom: 2px solid #948979;
+    border: 3px solid var(--text-color);
+    border-top: 0px;
+    border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 16px;
 }
+
 
 .header-container {
     height: 100%;
@@ -103,8 +122,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: #6aaa64 1px solid;
-    border-radius: 20px;
+    border: #000000 2px solid;
+    border-radius: 50px;
 }
 
 #day-ico {
@@ -126,7 +145,7 @@
     width: 50%;
     height: 100%;
     border-radius: 50%;
-    background-color: #2b6bd8;
+    background-color: var(--text-color);
     border-width: 0px;
     cursor: pointer;
 }
@@ -137,6 +156,7 @@
     flex-direction: column;
     align-content: center;
     align-items: center;
+    flex: 1;
 }
 
 .game-container {
@@ -219,15 +239,10 @@
 
 #enter:disabled {
     background-color: #aaa;
-    /* Siva pozadina */
     color: white;
-    /* Beli tekst */
     border: 2px solid #888;
-    /* Tamnosiva ivica */
     cursor: not-allowed;
-    /* Zabrana kursora */
     opacity: 0.6;
-    /* Poluprovidno */
     transition: 0.3s ease;
 }
 
@@ -249,4 +264,16 @@
 .gray {
     background-color: #787c7e;
     color: white;
+}
+
+footer {
+    font-style: italic;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #333131;
+    color: white;
+    padding: 2px;
+    text-align: center;
 }

@@ -16,47 +16,51 @@
 </head>
 
 <body class="body">
-    <header class="header">
-        <div class="header-container">
-            <div class="header-left-container">
-                <div class="header-left-div">
-                    <button id="hint-btn" class="hint"><div class=" icon" style="width: 100%; height: 100%; border-radius: inherit;"><img class="" id="hint-img" src="styles/hint.png" alt="Logo"></div></button>
+        <header class="header">
+            <div class="header-container">
+                <div class="header-left-container">
+                    <div class="header-left-div">
+                        <button id="hint-btn" class="hint">
+                            <div class=" icon" style="width: 100%; height: 100%; border-radius: inherit;"><img class=""
+                                    id="hint-img" src="styles/hint.png" alt="Logo"></div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="header-middle-container">WORDLE</div>
+
+                <div class="header-right-container">
+                    <div class="header-right-div">
+                        <div style=" user-select: none;" id="day-ico">🌑</div>
+                        <div style=" user-select: none;" id="night-ico">☀️</div>
+
+                        <button id="slider" class="settings"></button>
+                    </div>
+                </div>
+
+            </div>
+        </header>
+
+        <div class="main">
+            <div class="game-container">
+                <div class="game-board" id="game-board"></div>
+            </div>
+            <div class="keyboard-container">
+                <div class="keyboard" id="keyboard"></div>
+            </div>
+            <div id="alert-container" class="hidden">
+                <div id="custom-alert">
+                    <div class="alert-box">
+                        <p id="alert-message">You guessed word. Well done!</p>
+                        <button id="alert-ok">Play again</button>
+                    </div>
                 </div>
             </div>
-
-            <div class="header-middle-container">WORDLE</div>
-
-            <div class="header-right-container">
-                <div class="header-right-div">
-                    <div id="day-ico">☀️</div>
-                    <div id="night-ico">🌙</div>
-
-                    <button id="slider" class="settings"></button>
-                </div>
-            </div>
-        
         </div>
-    </header>
 
-    <div class="main">
-        <div class="game-container">
-            <div class="game-board" id="game-board"></div>
-        </div>
-        <div class="keyboard-container">
-            <div class="keyboard" id="keyboard"></div>
-        </div>
-        <div id="alert-container" class="hidden">
-            <div id="custom-alert">
-                <div class="alert-box">
-                    <p id="alert-message">You guessed word. Well done!</p>
-                    <button id="alert-ok">Play again</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <footer class="footer">
-    </footer>
-
+        <footer class="footer">
+            <p>Made by Markovic Lazar</p>
+        </footer>
 
 </body>
 

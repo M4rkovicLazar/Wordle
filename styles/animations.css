@@ -1,6 +1,6 @@
 .tile.active {
   border: 2px solid var(--tile-active);
-  box-shadow: 0 0 3px var(--tile-active);
+  box-shadow: 0 0 5px var(--tile-active);
 }
 
 @keyframes shake {
@@ -87,35 +87,7 @@
   transform: translateX(40px);
 }
 
-.animate-slide {
-  animation: slideEffect 0.3s ease;
-}
-
-@keyframes slideEffect {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(40px);
-  }
-}
-
 .settings-Night {
   transition: transform 0.5s ease;
   transform: translateX(0px);
-}
-
-.animate-slide-Day {
-  animation: slideEffectDay 0.5s ease;
-}
-
-@keyframes slideEffectDay {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-40px);
-  }
 }

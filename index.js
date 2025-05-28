@@ -151,17 +151,17 @@ async function EnterPressed() {
 
         if ((currentWord.toUpperCase()) === (wordForGuess.toUpperCase())) {
             gameOver = true;
-            showCustomAlert("Well done!!!", "Try again");
+            showCustomAlert("Well done!!! Word is: " + wordForGuess, "Try again");
             return;
         }
         else if (currentRow === maxRows - 1) {
             gameOver = true;
-            showCustomAlert("Good luck next time", "Try again");
+            showCustomAlert("Good luck next time + Word was: " + wordForGuess, "Try again");
             return;
         }
 
         if (gameOver) {
-            showCustomAlert("Well done!!!", "Try again");
+            showCustomAlert("Well done!!! Word is: " + wordForGuess, "Try again");
             return;
         }
 
@@ -304,7 +304,9 @@ async function getDefinition() {
         console.error(error);
     }
 }
+
 let slider = document.getElementById("slider");
+slider.classList.add("settings-Night");
 
 slider.addEventListener("click", () => {
     if (slider.classList.contains("settings-Night")) {
@@ -315,6 +317,13 @@ slider.addEventListener("click", () => {
         slider.classList.add("settings-Night");
     }
 });
+
+const toggleTheme = () => {
+    const root = document.documentElement;
+    root.classList.toggle('light');
+};
+
+document.getElementById('slider').addEventListener('click', toggleTheme);
 
 Game();
 
